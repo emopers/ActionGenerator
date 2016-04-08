@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Simulates constant real-time user load: users using service with reasonable delays between actions.
@@ -115,7 +116,8 @@ public class RealTimePlayer extends Player {
     public void run() {
       long startTime = System.currentTimeMillis();
       while (System.currentTimeMillis() < startTime + timeToWork && sourceGroup.size() > 0) {
-        int sourceIndex = (int) (Math.random() * sourceGroup.size());
+        Random r = new Random();
+        int sourceIndex = r.nextInt(sourceGroup.size());
         Source source = sourceGroup.get(sourceIndex);
         Event event = source.nextEvent();
         if (null == event) {
@@ -134,7 +136,7 @@ public class RealTimePlayer extends Player {
         }
         try {
           if (sourceGroup.size() > 0) {
-            long sleepTime = (long) ((minActionDelay + Math.random() * (maxActionDelay - minActionDelay)) / sourceGroup
+            long sleepTime = (long) ((minActionDelay + r.nextDouble() * (maxActionDelay - minActionDelay)) / sourceGroup
                 .size());
             Thread.sleep(sleepTime);
           }
